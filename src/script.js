@@ -1,4 +1,4 @@
-import { renderWord } from "./utils.js"
+import { Word } from "./letter.js"
 
 const currentwordDiv = document.getElementById('current-word')
 
@@ -6,28 +6,18 @@ const allwords = await fetch("src/commonwords.txt")
     .then(res => res.text())
     .then(text => text.split(" "))
 
-let currentWord =
-    allwords[Math.floor(Math.random() * allwords.length)].split("")
-let currentLetter = 0
+let currentWord = new Word(
+    allwords[Math.floor(Math.random() * allwords.length)],
+    currentwordDiv
+)
 
 window.addEventListener("keydown", (e) => {
     switch (e.key) {
-        case currentWord[currentLetter]:
-            nextLetter()
-            break
-
         case "Escape":
-            currentLetter = 0
-            currentWord =
-                allwords[Math.floor(Math.random() * allwords.length)].split("")
-            renderWord(currentwordDiv, currentWord, currentLetter)
-            break
+            currentWord.resetNewWord(
+                allwords[Math.floor(Math.random() * allwords.length)]
+            )
+            return
     }
+    currentWord.nextLetter(e.key)
 })
-
-const nextLetter = () => {
-    currentLetter++
-    renderWord(currentwordDiv, currentWord, currentLetter)
-}
-
-renderWord(currentwordDiv, currentWord, currentLetter)
