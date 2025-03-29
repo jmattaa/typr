@@ -1,6 +1,6 @@
 const untypedletter = "text-slate-400"
 const typedeletter = "text-white"
-const wrongletter = "text-red-500"
+const wrongletter = "text-red-400/80"
 
 class Letter {
     constructor(letter, typed = false) {
@@ -29,10 +29,14 @@ export class Word {
 
         // do an initial render 🔥
         this.render(this.div)
+
+        this.finished = false
     }
 
     render() {
         this.div.innerHTML = this.letters.map((l) => l.toString()).join("")
+
+        if (this.currentLetter === this.letters.length) this.finished = true
     }
 
     nextLetter(key) {
@@ -47,10 +51,21 @@ export class Word {
         this.render(this.div)
     }
 
-    resetNewWord(word) {
+    backspace() {
+        if (this.currentLetter > 0) {
+            this.currentLetter--
+            this.letters[this.currentLetter].typed = false
+            this.letters[this.currentLetter].wrong = false
+            this.render(this.div)
+            this.finished = false
+        }
+    }
+
+    newWord(word) {
         this.word = word
         this.currentLetter = 0
         this.letters = []
+        this.finished = false
         for (let i in this.word) this.letters.push(new Letter(this.word[i]))
         this.render(this.div)
     }

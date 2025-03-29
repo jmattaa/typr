@@ -14,7 +14,16 @@ let currentWord = new Word(
 window.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "Escape":
-            currentWord.resetNewWord(
+            currentWord.newWord(
+                allwords[Math.floor(Math.random() * allwords.length)]
+            )
+            return
+        case "Backspace":
+            currentWord.backspace()
+            return
+        case " ":
+        case "Enter":
+            currentWord.finished && currentWord.newWord(
                 allwords[Math.floor(Math.random() * allwords.length)]
             )
             return
